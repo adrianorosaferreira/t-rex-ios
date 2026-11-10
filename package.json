@@ -1,0 +1,20 @@
+{
+  "name": "rex-rush",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rex Rush: jogo runner em pixel art para iOS (Capacitor), baseado no t-rex-runner.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "sync": "cap sync ios",
+    "open": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.6.0",
+    "@capacitor/ios": "8.6.0",
+    "@capacitor/preferences": "8.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0"
+  }
+}

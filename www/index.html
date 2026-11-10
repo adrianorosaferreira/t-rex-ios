@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Rex Rush</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="interstitial-wrapper"><div class="icon-offline"></div></div>
+  <div id="offline-resources"><img id="offline-resources-1x" alt=""><img id="offline-resources-2x" alt=""></div>
+
+  <section id="intro" class="screen">
+    <canvas class="mascot big" width="44" height="47"></canvas>
+    <h1 class="title">REX RUSH</h1>
+    <p class="blink">Tap to skip</p>
+  </section>
+
+  <section id="menu" class="screen" hidden>
+    <div class="row"><canvas class="mascot" width="44" height="47"></canvas><h1 class="title small">REX RUSH</h1></div>
+    <button id="btn-new" class="btn">New Game</button>
+    <h2>Top 10</h2>
+    <ol id="top10"></ol>
+  </section>
+
+  <section id="gameover" class="screen dim" hidden>
+    <h2 class="title small">Game Over</h2>
+    <p class="score" id="go-score">0</p>
+    <p class="rank" id="go-rank"></p>
+    <div class="row"><button id="btn-again" class="btn">Play Again</button><button id="btn-menu" class="btn alt">Menu</button></div>
+  </section>
+
+  <section id="pause" class="screen dim" hidden>
+    <h2 class="title small">Paused</h2>
+    <div class="row"><button id="btn-continue" class="btn">Continue</button><button id="btn-pause-menu" class="btn alt">Menu</button></div>
+  </section>
+
+  <script src="ranking.js"></script>
+  <script src="runner.js"></script>
+  <script src="sprites.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

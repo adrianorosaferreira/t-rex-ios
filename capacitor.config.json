@@ -1,0 +1,11 @@
+{
+  "appId": "com.ferreira.trex",
+  "appName": "Rex Rush",
+  "webDir": "www",
+  "backgroundColor": "#4cc9f0",
+  "ios": {
+    "contentInset": "never",
+    "scrollEnabled": false,
+    "allowsLinkPreview": false
+  }
+}
