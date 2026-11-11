@@ -1564,7 +1564,7 @@
         DROP_VELOCITY: -5,
         GRAVITY: 0.6,
         HEIGHT: 47,
-        HEIGHT_DUCK: 25,
+        HEIGHT_DUCK: 29,
         INIITAL_JUMP_VELOCITY: -10,
         INTRO_DURATION: 1500,
         MAX_JUMP_HEIGHT: 30,
@@ -1572,8 +1572,8 @@
         SPEED_DROP_COEFFICIENT: 3,
         SPRITE_WIDTH: 262,
         START_X_POS: 50,
-        WIDTH: 44,
-        WIDTH_DUCK: 59
+        WIDTH: 61, // Rex Rush: sized for the new T-rex art
+        WIDTH_DUCK: 68
     };
 
 
@@ -1583,15 +1583,16 @@
      */
     Trex.collisionBoxes = {
         DUCKING: [
-            new CollisionBox(1, 18, 55, 25)
+            new CollisionBox(1, 19, 60, 13),
+            new CollisionBox(17, 34, 41, 13)
         ],
         RUNNING: [
-            new CollisionBox(22, 0, 17, 16),
-            new CollisionBox(1, 18, 30, 9),
-            new CollisionBox(10, 35, 14, 8),
-            new CollisionBox(1, 24, 29, 5),
-            new CollisionBox(5, 30, 21, 4),
-            new CollisionBox(9, 34, 15, 4)
+            new CollisionBox(39, 6, 20, 9),
+            new CollisionBox(23, 17, 33, 5),
+            new CollisionBox(1, 23, 50, 5),
+            new CollisionBox(4, 29, 44, 5),
+            new CollisionBox(18, 35, 20, 6),
+            new CollisionBox(17, 41, 26, 6)
         ]
     };
 
@@ -1621,15 +1622,15 @@
      */
     Trex.animFrames = {
         WAITING: {
-            frames: [44, 0],
+            frames: [61, 0],
             msPerFrame: 1000 / 3
         },
         RUNNING: {
-            frames: [88, 132],
+            frames: [122, 183],
             msPerFrame: 1000 / 12
         },
         CRASHED: {
-            frames: [220],
+            frames: [305],
             msPerFrame: 1000 / 60
         },
         JUMPING: {
@@ -1637,7 +1638,7 @@
             msPerFrame: 1000 / 60
         },
         DUCKING: {
-            frames: [264, 323],
+            frames: [366, 434],
             msPerFrame: 1000 / 8
         }
     };

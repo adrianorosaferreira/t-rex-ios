@@ -107,14 +107,15 @@
   }
 
   function animateMascots(sheet) {
-    var cs = document.querySelectorAll('canvas.mascot'), f = 0, T = RexSprites.TREX;
+    var cs = document.querySelectorAll('canvas.mascot'), f = 0, F = RexDino.frames;
     setInterval(function () {
       f ^= 1;
+      var r = F[f ? 'run1' : 'run2'];
       for (var i = 0; i < cs.length; i++) {
         var x = cs[i].getContext('2d');
         x.imageSmoothingEnabled = false;
-        x.clearRect(0, 0, 44, 47);
-        x.drawImage(sheet, T.x + (f ? 88 : 132), T.y, 44, 47, 0, 0, 44, 47);
+        x.clearRect(0, 0, 81, 56);
+        x.drawImage(sheet, r[0], r[1], 81, 56, 0, 0, 81, 56);
       }
     }, 160);
   }
@@ -122,7 +123,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var sheets = RexSprites.install(R);
     runner = new R('.interstitial-wrapper');
-    animateMascots(sheets.ldpi);
+    animateMascots(sheets.rex);
     RexRanking.load().then(function (l) { top10 = l; renderTop(); });
 
     var toMenu = function () { clearTimeout(timer); if (!$('intro').hidden) show('menu'); };

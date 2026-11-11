@@ -24,43 +24,6 @@
   function r(x, y, w, h, c) { ctx.fillStyle = C[c] || c; ctx.fillRect(x, y, w, h); }
   function at(ox, oy) { return function (x, y, w, h, c) { r(ox + x, oy + y, w, h, c); }; }
 
-  function eye(X, x, y, mode) {
-    X(x, y, 5, 5, 'eye');
-    if (mode === 'dead') {
-      for (var i = 0; i < 5; i++) { X(x + i, y + i, 1, 1, 'pupil'); X(x + 4 - i, y + i, 1, 1, 'pupil'); }
-    } else { X(x + 2, y + 1, 2, 3, 'pupil'); }
-  }
-
-  function leg(X, x, y, up) {
-    X(x, y, 5, up ? 6 : 10, 'out'); X(x + 1, y, 3, up ? 5 : 9, 'body');
-    X(x, y + (up ? 4 : 8), 8, 3, 'out');
-  }
-
-  // 44x47 standing / running / jumping / crashed rex.
-  function dino(ox, oy, legs, eyeMode) {
-    var X = at(ox, oy);
-    X(0, 13, 3, 5, 'out'); X(0, 17, 12, 8, 'out'); X(1, 18, 11, 6, 'body');
-    X(8, 14, 23, 21, 'out'); X(9, 15, 21, 19, 'body'); X(18, 20, 10, 13, 'belly');
-    X(5, 15, 3, 3, 'spike'); X(10, 12, 3, 3, 'spike'); X(15, 11, 3, 3, 'spike');
-    X(30, 21, 6, 3, 'out'); X(34, 21, 2, 5, 'out');
-    X(21, 0, 20, 17, 'out'); X(22, 1, 18, 15, 'body'); X(23, 2, 8, 2, 'light');
-    X(30, 11, 11, 2, 'out'); X(32, 13, 8, 2, 'mouth'); X(38, 3, 1, 2, 'out');
-    eye(X, 25, 3, eyeMode);
-    leg(X, 11, 34, legs === 1); leg(X, 21, 34, legs === 2);
-  }
-
-  // 59x47 ducking rex (drawn in the lower part of the frame).
-  function duck(ox, oy, legs) {
-    var X = at(ox, oy);
-    X(0, 24, 12, 7, 'out'); X(1, 25, 11, 5, 'body');
-    X(9, 22, 30, 16, 'out'); X(10, 23, 28, 14, 'body'); X(16, 30, 18, 6, 'belly');
-    X(14, 20, 3, 3, 'spike'); X(21, 20, 3, 3, 'spike'); X(28, 20, 3, 3, 'spike');
-    X(37, 20, 21, 15, 'out'); X(38, 21, 19, 13, 'body'); X(39, 22, 7, 2, 'light');
-    X(48, 30, 10, 2, 'out'); X(49, 32, 8, 2, 'mouth');
-    eye(X, 43, 23, 'open');
-    leg(X, 14, 37, legs === 1); leg(X, 26, 37, legs === 2);
-  }
-
   function cactus(ox, oy, w, h) {
     var X = at(ox, oy), t = w > 20 ? 7 : 5, cx = (w - t) >> 1, a = w > 20 ? 4 : 3;
     function B(x, y, bw, bh) { X(x, y, bw, bh, 'cactusDark'); X(x + 1, y + 1, bw - 2, bh - 2, 'cactus'); }
@@ -140,14 +103,39 @@
     }
   }
 
+  // T-rex from the player's reference art (rex-sprite.js), 1 art pixel =
+  // 0.75 game units. Frame slots: 61 wide standing, 68 wide ducking.
+  var REX_SLOTS = [['idle', 0], ['idle', 61], ['run1', 122], ['run2', 183],
+    ['idle', 244], ['crash', 305], ['duck1', 366], ['duck2', 434]];
+  function rexSheet() {
+    var D = window.RexDino, c = document.createElement('canvas');
+    c.width = D.W; c.height = D.H;
+    var x = c.getContext('2d'), img = x.createImageData(D.W, D.H), p = img.data;
+    var rgb = D.palette.map(function (h) { return [1, 3, 5].map(function (i) { return parseInt(h.substr(i, 2), 16); }); });
+    D.rows.forEach(function (row, y) {
+      for (var i = 0; i < row.length; i++) {
+        var k = row.charCodeAt(i) - 97;
+        if (k < 0) continue;
+        var o = (y * D.W + i) * 4;
+        p[o] = rgb[k][0]; p[o + 1] = rgb[k][1]; p[o + 2] = rgb[k][2]; p[o + 3] = 255;
+      }
+    });
+    x.putImageData(img, 0, 0);
+    return c;
+  }
+  function drawRex(x, rex, T, s) {
+    var F = window.RexDino.frames, k = 0.75 * s;
+    x.imageSmoothingEnabled = false;
+    REX_SLOTS.forEach(function (slot) {
+      var f = F[slot[0]], w = f[2] * k, h = f[3] * k;
+      x.drawImage(rex, f[0], f[1], f[2], f[3], (T.x + slot[1]) * s, T.y * s + 47 * s - h, w, h);
+    });
+  }
+
   function build() {
     var c = document.createElement('canvas');
     c.width = W; c.height = H; ctx = c.getContext('2d');
     var T = LDPI.TREX;
-    dino(T.x, T.y, 0, 'open'); dino(T.x + 44, T.y, 0, 'open');
-    dino(T.x + 88, T.y, 1, 'open'); dino(T.x + 132, T.y, 2, 'open');
-    dino(T.x + 176, T.y, 0, 'shut'); dino(T.x + 220, T.y, 0, 'dead');
-    duck(T.x + 264, T.y, 1); duck(T.x + 323, T.y, 2);
     var off = 0, n, k;
     for (n = 1; n <= 3; n++) {
       for (k = 0; k < n; k++) cactus(LDPI.CACTUS_SMALL.x + off + k * 17, 2, 17, 35);
@@ -170,7 +158,9 @@
     var x2 = c2.getContext('2d');
     x2.imageSmoothingEnabled = false;
     x2.drawImage(c, 0, 0, W * 2, H * 2);
-    return { ldpi: c, hdpi: c2 };
+    var rex = rexSheet();
+    drawRex(ctx, rex, T, 1); drawRex(x2, rex, T, 2);
+    return { ldpi: c, hdpi: c2, rex: rex };
   }
 
   // Applies the sheet to the <img> tags and sprite layout used by runner.js.
